@@ -1,0 +1,10 @@
+[package]
+name = "find-excel"
+version = "0.1.0"
+authors = ["rexxarM <mophymf@gmail.com>"]
+
+[dependencies]
+glob = "0.2"
+calamine = "0.13"
+time = "0.1"
+regex = "0.2"
