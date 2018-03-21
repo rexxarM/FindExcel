@@ -2,6 +2,7 @@ extern crate glob;
 extern crate calamine;
 extern crate time;
 extern crate regex;
+extern crate clap;
 
 use regex::Regex;
 use glob::glob;
@@ -11,18 +12,21 @@ use time::PreciseTime;
 fn main() {
     println!("find excel begin...");
     let path = "./**/*.xlsx";
-    let excel = "test/Localization_Skill.xlsx";
+    let excel = "test/Seal.xlsx";
+    let re = Regex::new(r"Tips\d+").unwrap();
+
     // visit(path);
     let start = PreciseTime::now();
     let mut workbook: Xlsx<_> = open_workbook(excel).expect("Cannot open file");
     let sheets = workbook.sheet_names().to_owned();
     for s in sheets {
         if let Some(Ok(range)) = workbook.worksheet_range(&s) {
-            let total_cells = range.get_size().0 * range.get_size().1;
-            let non_empty_cells: usize = range.used_cells().count();
             for row in range.rows() { 
-                for cell in row{
-                    println!("cell in {} => {:?}",s, cell);
+                for (i, c) in row.iter().enumerate() {
+                    let value = c.to_string();
+                    if re.is_match(&value){
+                        println!("cell in {} {}=> {:?}",s, i,value);
+                    }
                 }
             }
         }
